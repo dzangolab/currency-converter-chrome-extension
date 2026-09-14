@@ -203,6 +203,10 @@ currency_converter/
 - **Fetch API**: For HTTP requests to either provider
 - **CSS Grid/Flexbox**: For responsive layout
 
+### Commit Conventions & Git Hooks
+
+Commits must follow [Conventional Commits](https://www.conventionalcommits.org/) (`type: subject`, e.g. `fix: correct date range validation`, `feat: add reset button`) — enforced by [commitlint](https://commitlint.js.org/) (`commitlint.config.js`) via a [husky](https://typicode.github.io/husky/) `commit-msg` hook. A `pre-commit` hook also runs [sort-package-json](https://github.com/keithamus/sort-package-json) (re-staging `package.json` if it changed) and the full test suite — a commit is rejected if either hook fails. Hooks install automatically via `npm install`'s `prepare` script; check a message without committing with `echo "your message" | npx commitlint`.
+
 ### Adding a New Provider
 
 Add an entry to the `PROVIDERS` object in `extension/providers.js` with: `id`, `label`, `currencies` (array of `{code, name}` — verify each code actually exists in that API's own currency-list response first), `buildUrl(from, to, date)`, `parseRate(data, from, to)`, `describeHttpError(status)`, and optionally `buildFallbackUrl(from, to, date)`. Then add its host(s) to `host_permissions` in `manifest.json` — a popup page's `fetch()` calls are blocked for hosts not declared there, even when the target sends permissive CORS headers.
