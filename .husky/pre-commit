@@ -1,0 +1,4 @@
+npx sort-package-json
+git add package.json
+
+npm test
