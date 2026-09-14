@@ -10,7 +10,7 @@
     "historical"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Olvier Pichon",
   "scripts": {
     "prepare": "husky",
     "test": "jest",
