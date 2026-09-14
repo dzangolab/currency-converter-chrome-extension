@@ -214,17 +214,13 @@ describe('Copy Button', () => {
 });
 
 describe('Date Validation', () => {
-  const todayStr = () => new Date().toISOString().split('T')[0];
-
   it('rejects and resets a future date, showing an error', () => {
     const conversionDate = document.getElementById('conversionDate');
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    conversionDate.value = tomorrow.toISOString().split('T')[0];
+    conversionDate.value = Temporal.Now.plainDateISO().add({ days: 1 }).toString();
 
     conversionDate.dispatchEvent(new Event('change', { bubbles: true }));
 
-    expect(conversionDate.value).toBe(todayStr());
+    expect(conversionDate.value).toBe(Temporal.Now.plainDateISO().toString());
     expect(document.getElementById('error').textContent).toBe(
       'Please select a date in the past or today'
     );
@@ -232,7 +228,7 @@ describe('Date Validation', () => {
   });
 
   it("accepts today's date without an error", () => {
-    document.getElementById('conversionDate').value = todayStr();
+    document.getElementById('conversionDate').value = Temporal.Now.plainDateISO().toString();
 
     document.getElementById('conversionDate').dispatchEvent(new Event('change', { bubbles: true }));
 

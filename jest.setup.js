@@ -1,3 +1,16 @@
+// Node has no native Temporal yet, and the browser extension itself loads
+// the same polyfill as a vendored classic <script> (extension/vendor/
+// temporal-polyfill.js) rather than through npm — so it's loaded here
+// separately, before anything under test can call a Temporal-dependent
+// function. (@js-temporal/polyfill was picked over the newer, lighter
+// temporal-polyfill package specifically because it ships a real CJS build
+// — temporal-polyfill is ESM-only, and Jest's module system rejects a
+// dynamic import() of an ESM package without --experimental-vm-modules,
+// which isn't worth forcing on this project just for one dependency.)
+if (typeof globalThis.Temporal === 'undefined') {
+  globalThis.Temporal = require('@js-temporal/polyfill').Temporal;
+}
+
 // Mock Chrome storage API
 global.chrome = {
   storage: {

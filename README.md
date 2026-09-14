@@ -186,9 +186,11 @@ currency_converter/
 │   ├── options.html    # Settings page UI
 │   ├── options.js      # Settings page logic (saves/loads extensionSettings)
 │   ├── options.css     # Settings page layout override (full-tab, not popup-width)
-│   └── styles.css      # Shared styling (popup + settings)
+│   ├── styles.css      # Shared styling (popup + settings)
+│   └── vendor/
+│       └── temporal-polyfill.js   # @js-temporal/polyfill, vendored (see Key Technologies)
 ├── __tests__/          # Jest test suite (not part of the extension)
-├── package.json        # Test tooling only
+├── package.json        # Test tooling, plus the one vendored runtime dependency
 └── README.md           # This file
 ```
 
@@ -199,7 +201,8 @@ currency_converter/
 
 ### Key Technologies
 - **Manifest V3**: Latest Chrome extension standard
-- **Vanilla JavaScript**: No frameworks (lightweight)
+- **Vanilla JavaScript**: No frameworks
+- **[Temporal](https://tc39.es/proposal-temporal/)**: all date handling (`Temporal.PlainDate`, `Temporal.Now.plainDateISO()`) instead of `Date` — sidesteps `Date`'s UTC-vs-local timezone ambiguity entirely for calendar-only values like a `YYYY-MM-DD` date input. Not yet native in Chrome, so `extension/vendor/temporal-polyfill.js` (from `@js-temporal/polyfill`) is loaded on the popup; drop it once Chrome ships `Temporal` natively.
 - **Fetch API**: For HTTP requests to either provider
 - **CSS Grid/Flexbox**: For responsive layout
 
@@ -242,7 +245,7 @@ To customize the extension:
 ## Performance
 
 - **Fast**: Most conversions complete in < 500ms
-- **Lightweight**: ~50KB total (no external dependencies)
+- **One vendored dependency**: a [Temporal](https://tc39.es/proposal-temporal/) polyfill (`extension/vendor/temporal-polyfill.js`, ~240KB unminified) is loaded on the popup for date handling, until Chrome ships `Temporal` natively — everything else is dependency-free
 - **Caching**: Consider implementing browser cache headers for repeat queries
 - **Rate limiting**: both providers allow generous free usage; fawazahmed0 explicitly advertises none
 

@@ -325,11 +325,12 @@ function switchProviderCurrencies(providerId, sourceCurrencySelect, targetCurren
   }
 }
 
-// Local calendar day as "YYYY-MM-DD" — toISOString() would render UTC and
-// can read as yesterday/tomorrow depending on the viewer's timezone offset.
+// Today's local calendar day as "YYYY-MM-DD". Temporal.PlainDate has no
+// time-of-day or timezone component at all — unlike Date, there's no UTC
+// vs. local ambiguity to accidentally reintroduce here; .toString() is
+// already ISO-8601 "YYYY-MM-DD" with no manual formatting needed.
 function todayLocalDateString() {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  return Temporal.Now.plainDateISO().toString();
 }
 
 // Sets the date <input>'s `min` so the native date picker itself refuses to

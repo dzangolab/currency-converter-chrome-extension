@@ -1,21 +1,12 @@
 // The <input type="date"> value is a plain "YYYY-MM-DD" string with no
-// timezone info. `new Date(dateStr)` parses that as UTC midnight, while
-// `new Date().toISOString()` renders in UTC too — mixing either with a
-// locally-computed "today" silently shifts the boundary by the viewer's UTC
-// offset (e.g. today reads as tomorrow, or a reset date reads as
-// yesterday, for anyone east of UTC). These two helpers keep every
-// date-string conversion anchored to the local calendar day instead.
-function parseLocalDate(dateStr) {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
-
-function toLocalDateString(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+// timezone info — exactly what Temporal.PlainDate models (a calendar date,
+// no time-of-day, no timezone), which is why all date handling here uses it
+// instead of Date. Date's UTC-vs-local ambiguity (new Date(dateStr) parses
+// as UTC midnight; a locally-computed "today" doesn't; mixing the two used
+// to shift the boundary by the viewer's UTC offset — today reading as
+// tomorrow, or a reset date reading as yesterday, for anyone east of UTC)
+// simply doesn't exist for PlainDate: there's no time-of-day or timezone
+// component for a UTC/local mismatch to hide in.
 
 // Wait for DOM to be ready
 let form, apiProviderSelect, sourceAmountInput, sourceCurrencySelect, targetCurrencySelect, conversionDateInput;
@@ -218,19 +209,18 @@ function enforceDateConstraints() {
   if (!conversionDateInput.value) return;
 
   const provider = PROVIDERS[apiProviderSelect.value] || PROVIDERS[DEFAULT_PROVIDER_ID];
-  const selectedDate = parseLocalDate(conversionDateInput.value);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const selectedDate = Temporal.PlainDate.from(conversionDateInput.value);
+  const today = Temporal.Now.plainDateISO();
 
-  if (selectedDate > today) {
+  if (Temporal.PlainDate.compare(selectedDate, today) > 0) {
     errorDiv.textContent = 'Please select a date in the past or today';
     errorDiv.classList.remove('hidden');
-    conversionDateInput.value = toLocalDateString(today);
+    conversionDateInput.value = today.toString();
     return;
   }
 
-  const minDate = parseLocalDate(provider.minDate);
-  if (selectedDate < minDate) {
+  const minDate = Temporal.PlainDate.from(provider.minDate);
+  if (Temporal.PlainDate.compare(selectedDate, minDate) < 0) {
     errorDiv.textContent = `This provider only has data from ${provider.minDate} onward. Date adjusted.`;
     errorDiv.classList.remove('hidden');
     conversionDateInput.value = provider.minDate;
@@ -333,8 +323,7 @@ function displayResult(apiResponse, sourceAmount, sourceCurrency, targetCurrency
   resultAmountDiv.textContent = `${formattedResult} ${targetCurrency}`;
 
   // Format the rate information
-  const dateObj = new Date(dateStr);
-  const formattedDate = dateObj.toLocaleDateString('en-US', {
+  const formattedDate = Temporal.PlainDate.from(dateStr).toLocaleString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
