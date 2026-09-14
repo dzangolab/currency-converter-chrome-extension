@@ -258,7 +258,7 @@ To customize the extension:
 
 ## License & Attribution
 
-- **Extension**: MIT License (create and modify as needed)
+- **Extension**: [MIT License](LICENSE)
 - **Data Sources**: [Frankfurter.app](https://www.frankfurter.app/) (ECB reference rates, free to use) and [fawazahmed0/currency-api](https://github.com/fawazahmed0/exchange-api) (community-maintained, free to use)
 
 ## Future Enhancements
