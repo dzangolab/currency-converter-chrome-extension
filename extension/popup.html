@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historical Currency Converter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header-row">
+      <div>
+        <h1>Currency Converter</h1>
+        <p class="subtitle">Historical exchange rates</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="resetBtn" class="btn-icon" title="Reset to defaults">↺</button>
+        <button type="button" id="settingsBtn" class="btn-icon" title="Settings">⚙</button>
+      </div>
+    </div>
+
+    <form id="converterForm">
+      <div class="form-group apiProvider">
+        <label for="apiProvider">Exchange Rate Provider</label>
+        <select id="apiProvider" required tabindex="1">
+        </select>
+      </div>
+
+      <div class="form-group sourceAmount">
+        <label for="sourceAmount">Amount</label>
+        <input
+          type="number"
+          id="sourceAmount"
+          placeholder="Enter amount"
+          value="1"
+          step="0.01"
+          min="0"
+          required
+          tabindex="3"
+        >
+      </div>
+
+      <div class="form-group sourceCurrency">
+        <label for="sourceCurrency">From</label>
+        <select id="sourceCurrency" required tabindex="2">
+          <option value="">Select currency</option>
+        </select>
+      </div>
+
+      <button type="button" id="swapBtn" class="btn-swap" title="Swap currencies" tabindex="5">
+        ⇅
+      </button>
+
+      <div class="form-group targetCurrency">
+        <label for="targetCurrency">To</label>
+        <select id="targetCurrency" required tabindex="4">
+          <option value="">Select currency</option>
+        </select>
+      </div>
+
+      <div class="form-group conversionDate">
+        <label for="conversionDate">Date</label>
+        <input 
+          type="date" 
+          id="conversionDate" 
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn-convert" tabindex="6">Convert</button>
+    </form>
+
+    <div id="result" class="result hidden">
+      <div class="result-amount" id="resultAmount"></div>
+      <div class="result-rate" id="resultRate"></div>
+      <button id="copyBtn" class="btn-copy">Copy Result</button>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+    <div id="loading" class="loading hidden">Converting...</div>
+
+    <div class="info">
+      <p>🔄 Historical exchange rates from your selected provider above</p>
+      <p>📅 Date range and currency list both depend on the provider — see its label</p>
+    </div>
+  </div>
+
+  <script src="providers.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

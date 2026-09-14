@@ -1,0 +1,27 @@
+/* options.html opens as a full browser tab, not a small popup — override
+   styles.css's fixed 420px popup width with a centered, readable column. */
+body {
+  width: auto;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  min-height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.saved-message {
+  color: #4CAF50;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.saved-message.hidden {
+  display: none;
+}

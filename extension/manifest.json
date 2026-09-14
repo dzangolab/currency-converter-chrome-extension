@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Historical Currency Converter",
+  "version": "1.0.0",
+  "description": "Convert currencies at historical exchange rates from any date in the past",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.frankfurter.app/*",
+    "https://cdn.jsdelivr.net/*",
+    "https://*.currency-api.pages.dev/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Historical Currency Converter"
+  },
+  "options_page": "options.html"
+}

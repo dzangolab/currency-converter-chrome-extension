@@ -1,0 +1,28 @@
+{
+  "name": "historical-currency-converter",
+  "version": "1.0.0",
+  "description": "Chrome extension for converting currencies at historical exchange rates",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "sort-package-json": "^4.0.0"
+  },
+  "keywords": [
+    "currency",
+    "converter",
+    "chrome-extension",
+    "exchange-rates",
+    "historical"
+  ],
+  "author": "",
+  "license": "MIT"
+}

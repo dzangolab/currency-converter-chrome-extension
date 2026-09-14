@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter Settings</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Settings</h1>
+    <p class="subtitle">Defaults for a new popup session</p>
+
+    <div class="form-group">
+      <label for="apiProvider">Default Exchange Rate Provider</label>
+      <select id="apiProvider" required>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="sourceCurrency">Default "From" Currency</label>
+      <select id="sourceCurrency" required>
+        <option value="">Select currency</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="targetCurrency">Default "To" Currency</label>
+      <select id="targetCurrency" required>
+        <option value="">Select currency</option>
+      </select>
+    </div>
+
+    <div id="savedMessage" class="saved-message hidden">✓ Saved</div>
+
+    <div class="info">
+      <p>These apply the first time you open the popup, or after a fresh install.</p>
+      <p>Once you convert something, the popup remembers your most recent provider, currencies, amount, and date instead — change these settings any time to reset what "the usual" looks like.</p>
+    </div>
+  </div>
+
+  <script src="providers.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
