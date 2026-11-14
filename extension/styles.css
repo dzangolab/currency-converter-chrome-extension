@@ -288,6 +288,118 @@ select {
   50% { opacity: 0.5; }
 }
 
+/* Recent conversions: a table, one row per conversion, newest first. Rows
+   have a fixed height so the scroll box can cap itself at the header plus
+   exactly 10 rows; a larger configured history scrolls inside it (header
+   stays put) instead of growing the popup. */
+.history {
+  --history-row-height: 26px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.history.hidden {
+  display: none;
+}
+
+.history h2 {
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.history-scroll {
+  max-height: calc(11 * var(--history-row-height));
+  overflow: auto;
+}
+
+.history-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.history-table th,
+.history-table td {
+  height: var(--history-row-height);
+  padding: 0 6px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.history-table th {
+  background: white;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  position: sticky;
+  text-transform: uppercase;
+  top: 0;
+}
+
+.history-table td {
+  border-bottom: 1px solid #f3f3f3;
+  color: #444;
+}
+
+/* Delete column: as narrow as its button, which stays quiet until hovered. */
+.history-table td:last-child {
+  width: 1%;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #bbb;
+  cursor: pointer;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
+}
+
+.btn-delete:hover,
+.btn-delete:focus-visible {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Hidden on screen but still read by screen readers (e.g. the Delete
+   column's header). */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Currency codes (the first cell of From and of To) sit left; amounts, rate
+   and date stay right-aligned. */
+.history-table td:nth-child(1),
+.history-table td:nth-child(4) {
+  padding-right: 0;
+  text-align: left;
+}
+
+.history-table th:first-child,
+.history-table td:first-child {
+  padding-left: 0;
+}
+
+.history-table th:last-child,
+.history-table td:last-child {
+  padding-right: 0;
+}
+
 .info {
   border-top: 1px solid #eee;
   color: #999;

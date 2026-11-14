@@ -12,6 +12,7 @@ A Chrome/Chromium extension for converting currencies at historical exchange rat
 - Real-time conversion as you type
 - Simple, clean interface
 - Copy results to clipboard
+- Recent conversions list (last 10 by default, configurable up to 100)
 - No API key required for either provider
 
 ## Installation
@@ -47,18 +48,33 @@ Only `extension/` is shipped. Everything else in the repo (`__tests__/`, `node_m
 5. **Select Date**: Pick a date within the chosen provider's supported range
 6. **View Result**: The converted amount appears instantly
 7. **Copy Result**: Click the "Copy Result" button to copy to clipboard
+8. **Review Recent Conversions**: Earlier conversions are listed in the table at the bottom of the popup
 
 Switching providers rebuilds both currency dropdowns for the new provider's currency list. If your currently-selected currency isn't available under the new provider (e.g. AED isn't on Frankfurter's list), that field resets to USD/EUR.
 
 ### Settings
 
-Click the ⚙ icon in the popup (or right-click the extension icon → Options, or "Extension options" from `chrome://extensions/`) to open the Settings page and configure your default provider and default "from"/"to" currencies.
+Click the ⚙ icon in the popup (or right-click the extension icon → Options, or "Extension options" from `chrome://extensions/`) to open the Settings page and configure your default provider and default "from"/"to" currencies, and how many recent conversions to keep.
 
-These are the defaults shown when there's nothing else to go on. Once you convert something, the popup remembers that specific provider/currencies/amount/date and restores it on every subsequent open, taking priority over these Settings. **Changing any Settings field clears that remembered session** — so a change here always takes visible effect the next time you open the popup, rather than being silently overridden by whatever you converted last.
+These are the defaults shown when there's nothing else to go on. Once you convert something, the popup remembers that specific provider/currencies/amount/date and restores it on every subsequent open, taking priority over these Settings. **Changing the default provider or currencies clears that remembered session** — so a change here always takes visible effect the next time you open the popup, rather than being silently overridden by whatever you converted last.
 
 ### Reset
 
-Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the form to your configured Settings — provider, "from"/"to" currencies, amount back to 1, date back to today — without leaving the popup. This also clears the remembered session the same way changing a Settings field does, and re-runs the conversion against the reset values so you see a live result right away, not a blank form.
+Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the form to your configured Settings — provider, "from"/"to" currencies, amount back to 1, date back to today — without leaving the popup. This also clears the remembered session the same way changing the default provider or currencies does (your recent conversions are kept), and re-runs the conversion against the reset values so you see a live result right away, not a blank form.
+
+### Recent Conversions
+
+Every successful conversion is added to the top of the **Recent conversions** table, above the notes at the bottom of the popup. Each row shows the amount converted (From), the rate, the converted amount (To) and the date of the rate. From and To each show the currency code on the left and the amount on the right:
+
+| From | | Rate | To | | Date |
+| :--- | ---: | ---: | :--- | ---: | ---: |
+| USD | 1,000.00 | 0.921234 | EUR | 921.23 | 05 Mar 2024 |
+
+Running the same conversion twice in a row doesn't add a duplicate row. Failed conversions aren't recorded, and the table is hidden until there's at least one row.
+
+Click the ✕ at the end of a row to delete it straight away (there's no confirmation).
+
+The table keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The table shows up to 10 rows and scrolls beyond that, with its header staying in place. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
 
 ### Real-Time Conversion
 
@@ -156,6 +172,7 @@ currency_converter/
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
+│   ├── history.js      # Recent-conversions helpers: size setting, table cell formatting, trimming, row deletion
 │   ├── providers.js    # Provider definitions: currency lists, URL/response handling
 │   ├── options.html    # Settings page UI
 │   ├── options.js      # Settings page logic (saves/loads extensionSettings)
@@ -206,18 +223,17 @@ To customize the extension:
 
 4. **Add new features** (in `popup.js`):
    - Cache historical rates for offline use
-   - Add currency conversion history
    - Export results as CSV
 
 ### Unpacked extension won't load
 - Make sure you selected the `extension/` subfolder, not the repo root (see [From source](#from-source-for-development))
-- Check that the folder has all the extension's files: `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
+- Check that the folder has all the extension's files: `history.js`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
 - Read the error on the extension's card in `chrome://extensions/`, or open the popup's console via **Inspect views: popup.html**
 
 ## Privacy & Data
 
 - **API calls only**: The only data sent anywhere is the currency pair and date of each conversion, to your selected provider (Frankfurter.app or fawazahmed0/currency-api's CDN)
-- **Local storage only**: Your last conversion (provider, currencies, amount, date) and your Settings-page defaults are saved on your device via `chrome.storage.local`, never synced or sent anywhere. The last conversion is kept only so the popup can restore it, not as a history, and is erased when you click ↺ Reset or change a Setting
+- **Local storage only**: Your last conversion (provider, currencies, amount, date), your recent conversions and your Settings-page defaults are saved on your device via `chrome.storage.local`, never synced or sent anywhere. The last conversion is kept so the popup can restore it, and is erased when you click ↺ Reset or change the default provider or currencies. The recent conversions are kept until they drop off the end of the list or you delete them
 - **No authentication**: Neither provider needs an account or API key, so no credentials are stored
 - **No tracking**: No analytics, telemetry or third-party scripts
 
@@ -245,7 +261,8 @@ To customize the extension:
 Possible additions to the extension:
 
 - [ ] Offline mode with cached historical rates
-- [ ] Conversion history with timestamps
+- [ ] Clear all or export the recent conversions
+- [ ] Show when each recent conversion was made
 - [ ] Batch conversion (convert multiple currencies at once)
 - [ ] Chart showing historical conversion rates over time
 - [ ] Support for cryptocurrency conversion
@@ -270,6 +287,9 @@ For issues with a specific provider's API:
 
 ## Changelog
 
+### Unreleased
+- 🕘 Recent conversions table (last 10 by default, configurable from 1 to 100 in Settings)
+
 ### Version 1.0.0 (Initial Release)
 - ✨ Full historical currency conversion
 - 📅 Date picker with validation
@@ -283,4 +303,4 @@ For issues with a specific provider's API:
 
 **Made with ❤️ for currency traders, travelers, and finance enthusiasts**
 
-Last Updated: 2026-09-12
+Last Updated: 2026-11-14

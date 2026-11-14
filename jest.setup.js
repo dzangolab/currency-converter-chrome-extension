@@ -84,6 +84,9 @@ global.renderPopupFixture = () => {
       </div>
       <div id="error" class="error hidden"></div>
       <div id="loading" class="loading hidden">Converting...</div>
+      <div id="history" class="history hidden">
+        <table><tbody id="historyRows"></tbody></table>
+      </div>
     </div>
   `;
 };
@@ -105,6 +108,7 @@ global.renderOptionsFixture = () => {
         <option value="">Select currency</option>
         ${CURRENCY_OPTIONS}
       </select>
+      <input type="number" id="historySize" min="1" max="100" step="1" value="10" required />
       <div id="savedMessage" class="saved-message hidden">✓ Saved</div>
     </div>
   `;

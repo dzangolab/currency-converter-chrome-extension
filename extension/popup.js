@@ -11,6 +11,7 @@
 // Wait for DOM to be ready
 let form, apiProviderSelect, sourceAmountInput, sourceCurrencySelect, targetCurrencySelect, conversionDateInput;
 let resultDiv, resultAmountDiv, resultRateDiv, errorDiv, loadingDiv, copyBtn, swapBtn, settingsBtn, resetBtn;
+let historyDiv, historyRows;
 
 function initializeDOMElements() {
   form = document.getElementById('converterForm');
@@ -28,6 +29,8 @@ function initializeDOMElements() {
   swapBtn = document.getElementById('swapBtn');
   settingsBtn = document.getElementById('settingsBtn');
   resetBtn = document.getElementById('resetBtn');
+  historyDiv = document.getElementById('history');
+  historyRows = document.getElementById('historyRows');
 
   if (!form || !sourceAmountInput || !sourceCurrencySelect) {
     console.error('DOM elements not found, retrying...');
@@ -265,6 +268,15 @@ async function performConversion() {
 
     displayResult(response, sourceAmount, sourceCurrency, targetCurrency, conversionDate);
 
+    recordConversion({
+      apiProvider: apiProviderSelect.value,
+      date: conversionDate,
+      rate: response.rate,
+      sourceAmount,
+      sourceCurrency,
+      targetCurrency
+    });
+
   } catch (error) {
     showError(error.message);
   } finally {
@@ -336,6 +348,84 @@ function displayResult(apiResponse, sourceAmount, sourceCurrency, targetCurrency
   resultDiv.classList.remove('hidden');
 }
 
+// Renders the stored history (newest first) as rows of the table above the
+// notes, hiding the pane entirely while there's nothing to show. Cells are
+// filled with textContent, never innerHTML, since they come from storage.
+function renderHistory(history, size) {
+  if (!historyDiv || !historyRows) return;
+
+  const entries = (Array.isArray(history) ? history : []).slice(0, normalizeHistorySize(size));
+  historyRows.replaceChildren(...entries.map((entry, index) => {
+    const row = document.createElement('tr');
+    row.append(...formatHistoryCells(entry).map((text) => {
+      const cell = document.createElement('td');
+      cell.textContent = text;
+      return cell;
+    }));
+
+    const deleteCell = document.createElement('td');
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn-delete';
+    deleteBtn.textContent = '✕';
+    deleteBtn.title = 'Delete';
+    deleteBtn.setAttribute('aria-label', 'Delete this conversion');
+    deleteBtn.addEventListener('click', () => deleteFromHistory(index));
+    deleteCell.append(deleteBtn);
+    row.append(deleteCell);
+
+    return row;
+  }));
+  historyDiv.classList.toggle('hidden', entries.length === 0);
+}
+
+// Deletes one row of the history (no confirmation) and re-renders. Reads the
+// stored history fresh, like recordConversion(), and removes by position:
+// rows render in stored order, so a row's index is its entry's index.
+function deleteFromHistory(index) {
+  chrome.storage.local.get(['conversionHistory', 'extensionSettings'], (result) => {
+    if (chrome.runtime.lastError) {
+      console.error('History load error:', chrome.runtime.lastError);
+      return;
+    }
+
+    const size = (result.extensionSettings || {}).historySize;
+    const history = removeFromHistory(result.conversionHistory, index);
+
+    chrome.storage.local.set({ conversionHistory: history }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('History save error:', chrome.runtime.lastError);
+        return;
+      }
+      renderHistory(history, size);
+    });
+  });
+}
+
+// Prepends a successful conversion to the stored history, trimmed to the
+// Settings page's historySize, and re-renders the pane. Settings are read
+// fresh here, for the same reason as resetToDefaults(): nothing in popup.js
+// caches them.
+function recordConversion(entry) {
+  chrome.storage.local.get(['conversionHistory', 'extensionSettings'], (result) => {
+    if (chrome.runtime.lastError) {
+      console.error('History load error:', chrome.runtime.lastError);
+      return;
+    }
+
+    const size = (result.extensionSettings || {}).historySize;
+    const history = addToHistory(result.conversionHistory, entry, size);
+
+    chrome.storage.local.set({ conversionHistory: history }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('History save error:', chrome.runtime.lastError);
+        return;
+      }
+      renderHistory(history, size);
+    });
+  });
+}
+
 // Show error message
 function showError(message) {
   errorDiv.textContent = message;
@@ -370,11 +460,13 @@ function loadFormData() {
     return;
   }
 
-  chrome.storage.local.get(['converterData', 'extensionSettings'], (result) => {
+  chrome.storage.local.get(['conversionHistory', 'converterData', 'extensionSettings'], (result) => {
     if (chrome.runtime.lastError) {
       console.error('Storage load error:', chrome.runtime.lastError);
       return;
     }
+
+    renderHistory(result.conversionHistory, (result.extensionSettings || {}).historySize);
 
     // Configured defaults (from the Settings/options page) replace
     // providers.js's hardcoded USD/EUR/frankfurter boot values — but only
@@ -438,6 +530,9 @@ if (typeof module !== 'undefined' && module.exports) {
     performConversion,
     fetchHistoricalRate,
     displayResult,
+    renderHistory,
+    recordConversion,
+    deleteFromHistory,
     showError,
     saveFormData,
     loadFormData

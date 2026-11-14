@@ -20,6 +20,7 @@
  */
 
 require('../extension/providers.js');
+require('../extension/history.js');
 require('../extension/popup.js');
 
 function bootPopup() {

@@ -9,6 +9,7 @@
 // fetchHistoricalRate()/switchProvider() depend on; it isn't destructured
 // here since it exposes globals, not module.exports.
 require('../extension/providers.js');
+require('../extension/history.js');
 
 const {
   initializeDOMElements,
