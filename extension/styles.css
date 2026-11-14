@@ -348,6 +348,40 @@ select {
   color: #444;
 }
 
+/* Delete column: as narrow as its button, which stays quiet until hovered. */
+.history-table td:last-child {
+  width: 1%;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #bbb;
+  cursor: pointer;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
+}
+
+.btn-delete:hover,
+.btn-delete:focus-visible {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Hidden on screen but still read by screen readers (e.g. the Delete
+   column's header). */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 /* Currency codes (the first cell of From and of To) sit left; amounts, rate
    and date stay right-aligned. */
 .history-table td:nth-child(1),

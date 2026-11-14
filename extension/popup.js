@@ -355,16 +355,51 @@ function renderHistory(history, size) {
   if (!historyDiv || !historyRows) return;
 
   const entries = (Array.isArray(history) ? history : []).slice(0, normalizeHistorySize(size));
-  historyRows.replaceChildren(...entries.map((entry) => {
+  historyRows.replaceChildren(...entries.map((entry, index) => {
     const row = document.createElement('tr');
     row.append(...formatHistoryCells(entry).map((text) => {
       const cell = document.createElement('td');
       cell.textContent = text;
       return cell;
     }));
+
+    const deleteCell = document.createElement('td');
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn-delete';
+    deleteBtn.textContent = '✕';
+    deleteBtn.title = 'Delete';
+    deleteBtn.setAttribute('aria-label', 'Delete this conversion');
+    deleteBtn.addEventListener('click', () => deleteFromHistory(index));
+    deleteCell.append(deleteBtn);
+    row.append(deleteCell);
+
     return row;
   }));
   historyDiv.classList.toggle('hidden', entries.length === 0);
+}
+
+// Deletes one row of the history (no confirmation) and re-renders. Reads the
+// stored history fresh, like recordConversion(), and removes by position:
+// rows render in stored order, so a row's index is its entry's index.
+function deleteFromHistory(index) {
+  chrome.storage.local.get(['conversionHistory', 'extensionSettings'], (result) => {
+    if (chrome.runtime.lastError) {
+      console.error('History load error:', chrome.runtime.lastError);
+      return;
+    }
+
+    const size = (result.extensionSettings || {}).historySize;
+    const history = removeFromHistory(result.conversionHistory, index);
+
+    chrome.storage.local.set({ conversionHistory: history }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('History save error:', chrome.runtime.lastError);
+        return;
+      }
+      renderHistory(history, size);
+    });
+  });
 }
 
 // Prepends a successful conversion to the stored history, trimmed to the
@@ -497,6 +532,7 @@ if (typeof module !== 'undefined' && module.exports) {
     displayResult,
     renderHistory,
     recordConversion,
+    deleteFromHistory,
     showError,
     saveFormData,
     loadFormData

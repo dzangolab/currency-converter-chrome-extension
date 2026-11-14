@@ -27,7 +27,7 @@ const entry = (overrides = {}) => ({
 });
 
 const rows = () => Array.from(document.querySelectorAll('#historyRows tr')).map((tr) =>
-  Array.from(tr.cells).map((td) => td.textContent)
+  Array.from(tr.cells).filter((td) => !td.querySelector('button')).map((td) => td.textContent)
 );
 
 describe('normalizeHistorySize()', () => {
@@ -81,6 +81,19 @@ describe('addToHistory()', () => {
 
   it('treats a missing stored history as empty', () => {
     expect(addToHistory(undefined, entry(), 10)).toEqual([entry()]);
+  });
+});
+
+describe('removeFromHistory()', () => {
+  it('removes only the entry at the given index, even when another row is identical', () => {
+    const history = [entry({ sourceAmount: 1 }), entry({ sourceAmount: 2 }), entry({ sourceAmount: 1 })];
+
+    expect(removeFromHistory(history, 2).map((e) => e.sourceAmount)).toEqual([1, 2]);
+  });
+
+  it('leaves the history unchanged for an out-of-range index, and treats a missing one as empty', () => {
+    expect(removeFromHistory([entry()], 5)).toEqual([entry()]);
+    expect(removeFromHistory(undefined, 0)).toEqual([]);
   });
 });
 
@@ -172,5 +185,53 @@ describe('popup history pane', () => {
     expect(consoleSpy).toHaveBeenCalledWith('History load error:', chrome.runtime.lastError);
     expect(chrome.storage.local.set).not.toHaveBeenCalled();
     consoleSpy.mockRestore();
+  });
+
+  describe('delete button', () => {
+    const stored = [entry({ sourceAmount: 3 }), entry({ sourceAmount: 2 }), entry({ sourceAmount: 1 })];
+
+    beforeEach(() => {
+      chrome.storage.local.get.mockImplementation((keys, callback) => {
+        callback({ conversionHistory: stored, extensionSettings: { historySize: 10 } });
+      });
+      renderHistory(stored, 10);
+    });
+
+    const deleteButtons = () => document.querySelectorAll('#historyRows .btn-delete');
+
+    it('shows one delete button per row', () => {
+      expect(deleteButtons()).toHaveLength(3);
+      expect(deleteButtons()[0].getAttribute('aria-label')).toBe('Delete this conversion');
+    });
+
+    it('deletes the clicked row from storage and the table, without asking', () => {
+      deleteButtons()[1].click();
+
+      const saved = chrome.storage.local.set.mock.calls.at(-1)[0].conversionHistory;
+      expect(saved.map((e) => e.sourceAmount)).toEqual([3, 1]);
+      expect(rows().map((cells) => cells[1])).toEqual(['3.00', '1.00']);
+    });
+
+    it('hides the pane once the last row is deleted', () => {
+      chrome.storage.local.get.mockImplementation((keys, callback) => {
+        callback({ conversionHistory: [entry()] });
+      });
+      renderHistory([entry()], 10);
+
+      deleteButtons()[0].click();
+
+      expect(document.getElementById('history').classList.contains('hidden')).toBe(true);
+    });
+
+    it('logs and skips the save when reading history fails', () => {
+      chrome.runtime.lastError = new Error('Storage access denied');
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      deleteButtons()[0].click();
+
+      expect(consoleSpy).toHaveBeenCalledWith('History load error:', chrome.runtime.lastError);
+      expect(chrome.storage.local.set).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
   });
 });

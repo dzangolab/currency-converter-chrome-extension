@@ -91,6 +91,8 @@ Every successful conversion is added to the top of the **Recent conversions** ta
 
 Running the same conversion twice in a row doesn't add a duplicate row. Failed conversions aren't recorded, and the table is hidden until there's at least one row.
 
+Click the ✕ at the end of a row to delete it straight away (there's no confirmation).
+
 The table keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The table shows up to 10 rows and scrolls beyond that, with its header staying in place. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
 
 ### Real-Time Conversion
@@ -198,7 +200,7 @@ currency_converter/
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
-│   ├── history.js      # Recent-conversions helpers: size setting, table cell formatting, trimming
+│   ├── history.js      # Recent-conversions helpers: size setting, table cell formatting, trimming, row deletion
 │   ├── providers.js    # Provider definitions: currency lists, URL/response handling
 │   ├── options.html    # Settings page UI
 │   ├── options.js      # Settings page logic (saves/loads extensionSettings)
@@ -281,7 +283,7 @@ To customize the extension:
 Possible additions to the extension:
 
 - [ ] Offline mode with cached historical rates
-- [ ] Clear or export the recent conversions
+- [ ] Clear all or export the recent conversions
 - [ ] Show when each recent conversion was made
 - [ ] Batch conversion (convert multiple currencies at once)
 - [ ] Chart showing historical conversion rates over time

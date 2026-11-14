@@ -72,6 +72,14 @@ function addToHistory(history, entry, size) {
   return [entry, ...rest].slice(0, normalizeHistorySize(size));
 }
 
+// Returns a new history without the entry at `index` (its row position in
+// the table, which renders the stored history in order). An out-of-range
+// index leaves the history unchanged.
+function removeFromHistory(history, index) {
+  const previous = Array.isArray(history) ? history : [];
+  return previous.filter((_, i) => i !== index);
+}
+
 Object.assign(globalThis, {
   DEFAULT_HISTORY_SIZE,
   MAX_HISTORY_SIZE,
@@ -79,5 +87,6 @@ Object.assign(globalThis, {
   addToHistory,
   formatHistoryCells,
   formatHistoryDate,
-  normalizeHistorySize
+  normalizeHistorySize,
+  removeFromHistory
 });
