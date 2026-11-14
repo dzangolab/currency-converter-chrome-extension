@@ -179,6 +179,7 @@ See `extension/providers.js` for both full lists with display names. Any code ou
 ```
 currency_converter/
 ├── extension/          # <- Load THIS folder as the unpacked extension
+│   ├── icons/          # Logo: SVG sources and the 16/32/48/128px PNGs
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
