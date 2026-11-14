@@ -22,6 +22,7 @@ currency_converter/
 │   ├── options.css
 │   └── styles.css
 ├── __tests__/          # Jest suite (not shipped)
+├── store/screenshots/  # Chrome Web Store listing images, 1280×800 (not shipped)
 ├── jest.config.js / jest.setup.js
 └── package.json / node_modules/   # test tooling only
 ```
