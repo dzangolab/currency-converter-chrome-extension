@@ -11,7 +11,7 @@
 // Wait for DOM to be ready
 let form, apiProviderSelect, sourceAmountInput, sourceCurrencySelect, targetCurrencySelect, conversionDateInput;
 let resultDiv, resultAmountDiv, resultRateDiv, errorDiv, loadingDiv, copyBtn, swapBtn, settingsBtn, resetBtn;
-let historyDiv, historyList;
+let historyDiv, historyRows;
 
 function initializeDOMElements() {
   form = document.getElementById('converterForm');
@@ -30,7 +30,7 @@ function initializeDOMElements() {
   settingsBtn = document.getElementById('settingsBtn');
   resetBtn = document.getElementById('resetBtn');
   historyDiv = document.getElementById('history');
-  historyList = document.getElementById('historyList');
+  historyRows = document.getElementById('historyRows');
 
   if (!form || !sourceAmountInput || !sourceCurrencySelect) {
     console.error('DOM elements not found, retrying...');
@@ -348,17 +348,20 @@ function displayResult(apiResponse, sourceAmount, sourceCurrency, targetCurrency
   resultDiv.classList.remove('hidden');
 }
 
-// Renders the stored history (newest first) into the pane above the notes,
-// hiding the pane entirely while there's nothing to show. Rows are built
-// with textContent, never innerHTML, since they come back from storage.
+// Renders the stored history (newest first) as rows of the table above the
+// notes, hiding the pane entirely while there's nothing to show. Cells are
+// filled with textContent, never innerHTML, since they come from storage.
 function renderHistory(history, size) {
-  if (!historyDiv || !historyList) return;
+  if (!historyDiv || !historyRows) return;
 
   const entries = (Array.isArray(history) ? history : []).slice(0, normalizeHistorySize(size));
-  historyList.replaceChildren(...entries.map((entry) => {
-    const row = document.createElement('li');
-    row.textContent = formatHistoryEntry(entry);
-    row.title = row.textContent; // full text if the row is truncated
+  historyRows.replaceChildren(...entries.map((entry) => {
+    const row = document.createElement('tr');
+    row.append(...formatHistoryCells(entry).map((text) => {
+      const cell = document.createElement('td');
+      cell.textContent = text;
+      return cell;
+    }));
     return row;
   }));
   historyDiv.classList.toggle('hidden', entries.length === 0);

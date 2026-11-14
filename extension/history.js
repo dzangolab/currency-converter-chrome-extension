@@ -31,20 +31,24 @@ function formatHistoryAmount(amount) {
   });
 }
 
-// "YYYY-MM-DD" -> "dd/MMM/yyyy", e.g. "2024-03-05" -> "05/Mar/2024".
+// "YYYY-MM-DD" -> "dd MMM yyyy", e.g. "2024-03-05" -> "05 Mar 2024".
 // Built by hand rather than via toLocaleString(), whose day/month/year order
 // and separators vary by locale and can't produce this exact pattern.
 function formatHistoryDate(dateStr) {
   const date = Temporal.PlainDate.from(dateStr);
   const day = String(date.day).padStart(2, '0');
-  return `${day}/${MONTH_ABBREVIATIONS[date.month - 1]}/${date.year}`;
+  return `${day} ${MONTH_ABBREVIATIONS[date.month - 1]} ${date.year}`;
 }
 
-// One history row: "USD 1,000.00 @ 0.921234 = EUR 921.23 05/Mar/2024".
-function formatHistoryEntry(entry) {
-  const source = `${entry.sourceCurrency} ${formatHistoryAmount(entry.sourceAmount)}`;
-  const target = `${entry.targetCurrency} ${formatHistoryAmount(entry.sourceAmount * entry.rate)}`;
-  return `${source} @ ${entry.rate.toFixed(6)} = ${target} ${formatHistoryDate(entry.date)}`;
+// One history table row's cells, in column order (From, Rate, To, Date),
+// e.g. ["USD 1,000.00", "0.921234", "EUR 921.23", "05 Mar 2024"].
+function formatHistoryCells(entry) {
+  return [
+    `${entry.sourceCurrency} ${formatHistoryAmount(entry.sourceAmount)}`,
+    entry.rate.toFixed(6),
+    `${entry.targetCurrency} ${formatHistoryAmount(entry.sourceAmount * entry.rate)}`,
+    formatHistoryDate(entry.date)
+  ];
 }
 
 function isSameConversion(a, b) {
@@ -69,7 +73,7 @@ Object.assign(globalThis, {
   MAX_HISTORY_SIZE,
   MIN_HISTORY_SIZE,
   addToHistory,
+  formatHistoryCells,
   formatHistoryDate,
-  formatHistoryEntry,
   normalizeHistorySize
 });

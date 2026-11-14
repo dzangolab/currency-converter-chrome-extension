@@ -81,7 +81,19 @@
 
     <div id="history" class="history hidden">
       <h2>Recent conversions</h2>
-      <ol id="historyList" class="history-list"></ol>
+      <div class="history-scroll">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th scope="col">From</th>
+              <th scope="col">Rate</th>
+              <th scope="col">To</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody id="historyRows"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="info">

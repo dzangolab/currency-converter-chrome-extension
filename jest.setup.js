@@ -85,7 +85,7 @@ global.renderPopupFixture = () => {
       <div id="error" class="error hidden"></div>
       <div id="loading" class="loading hidden">Converting...</div>
       <div id="history" class="history hidden">
-        <ol id="historyList"></ol>
+        <table><tbody id="historyRows"></tbody></table>
       </div>
     </div>
   `;

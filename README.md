@@ -81,9 +81,15 @@ Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the
 
 ### Recent Conversions
 
-Every successful conversion is added to the top of the **Recent conversions** list, above the notes at the bottom of the popup. Each row reads `USD 1,000.00 @ 0.921234 = EUR 921.23 05/Mar/2024`: source amount, the rate, the converted amount, and the date of the rate. Running the same conversion twice in a row doesn't add a duplicate row.
+Every successful conversion is added to the top of the **Recent conversions** table, above the notes at the bottom of the popup. Each row has four columns:
 
-The list keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The pane shows up to 10 rows and scrolls beyond that. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
+| From | Rate | To | Date |
+| ---: | ---: | ---: | ---: |
+| USD 1,000.00 | 0.921234 | EUR 921.23 | 05 Mar 2024 |
+
+The date is the date of the rate. Running the same conversion twice in a row doesn't add a duplicate row.
+
+The list keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The table shows up to 10 rows and scrolls beyond that, with its header staying in place. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
 
 ### Real-Time Conversion
 

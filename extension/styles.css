@@ -288,9 +288,10 @@ select {
   50% { opacity: 0.5; }
 }
 
-/* Recent conversions: one row per conversion, newest first. Rows have a
-   fixed height so the pane can cap itself at exactly 10 of them; a larger
-   configured history scrolls inside the pane instead of growing the popup. */
+/* Recent conversions: a table, one row per conversion, newest first. Rows
+   have a fixed height so the scroll box can cap itself at the header plus
+   exactly 10 rows; a larger configured history scrolls inside it (header
+   stays put) instead of growing the popup. */
 .history {
   --history-row-height: 26px;
   border-top: 1px solid #eee;
@@ -310,22 +311,50 @@ select {
   text-transform: uppercase;
 }
 
-.history-list {
-  list-style: none;
-  max-height: calc(10 * var(--history-row-height));
-  overflow-y: auto;
+.history-scroll {
+  max-height: calc(11 * var(--history-row-height));
+  overflow: auto;
 }
 
-.history-list li {
-  border-bottom: 1px solid #f3f3f3;
-  color: #444;
+.history-table {
+  border-collapse: collapse;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.history-table th,
+.history-table td {
   height: var(--history-row-height);
-  line-height: var(--history-row-height);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 0 6px;
+  text-align: right;
   white-space: nowrap;
+}
+
+.history-table th {
+  background: white;
+  border-bottom: 1px solid #ddd;
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  position: sticky;
+  text-transform: uppercase;
+  top: 0;
+}
+
+.history-table td {
+  border-bottom: 1px solid #f3f3f3;
+  color: #444;
+}
+
+.history-table th:first-child,
+.history-table td:first-child {
+  padding-left: 0;
+}
+
+.history-table th:last-child,
+.history-table td:last-child {
+  padding-right: 0;
 }
 
 .info {
