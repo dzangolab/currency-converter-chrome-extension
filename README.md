@@ -24,6 +24,7 @@ The shippable extension lives in the `extension/` subfolder:
    - `extension/popup.html`
    - `extension/popup.js`
    - `extension/providers.js`
+   - `extension/history.js`
    - `extension/options.html`
    - `extension/options.js`
    - `extension/options.css`
@@ -66,6 +67,7 @@ Note: This extension uses Manifest V3, which is Chrome-specific. Firefox require
 5. **Select Date**: Pick a date within the chosen provider's supported range
 6. **View Result**: The converted amount appears instantly
 7. **Copy Result**: Click the "Copy Result" button to copy to clipboard
+8. **Review Recent Conversions**: Earlier conversions are listed in the table at the bottom of the popup
 
 Switching providers rebuilds both currency dropdowns for the new provider's currency list. If your currently-selected currency isn't available under the new provider (e.g. AED isn't on Frankfurter's list), that field resets to USD/EUR.
 
@@ -77,19 +79,19 @@ These are the defaults shown when there's nothing else to go on. Once you conver
 
 ### Reset
 
-Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the form to your configured Settings — provider, "from"/"to" currencies, amount back to 1, date back to today — without leaving the popup. This also clears the remembered session the same way changing a Settings field does, and re-runs the conversion against the reset values so you see a live result right away, not a blank form.
+Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the form to your configured Settings — provider, "from"/"to" currencies, amount back to 1, date back to today — without leaving the popup. This also clears the remembered session the same way changing the default provider or currencies does (your recent conversions are kept), and re-runs the conversion against the reset values so you see a live result right away, not a blank form.
 
 ### Recent Conversions
 
-Every successful conversion is added to the top of the **Recent conversions** table, above the notes at the bottom of the popup. Each row has four columns:
+Every successful conversion is added to the top of the **Recent conversions** table, above the notes at the bottom of the popup. Each row shows the amount converted (From), the rate, the converted amount (To) and the date of the rate. From and To each show the currency code on the left and the amount on the right:
 
 | From | | Rate | To | | Date |
 | :--- | ---: | ---: | :--- | ---: | ---: |
 | USD | 1,000.00 | 0.921234 | EUR | 921.23 | 05 Mar 2024 |
 
-The date is the date of the rate. Running the same conversion twice in a row doesn't add a duplicate row.
+Running the same conversion twice in a row doesn't add a duplicate row. Failed conversions aren't recorded, and the table is hidden until there's at least one row.
 
-The list keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The table shows up to 10 rows and scrolls beyond that, with its header staying in place. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
+The table keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The table shows up to 10 rows and scrolls beyond that, with its header staying in place. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
 
 ### Real-Time Conversion
 
@@ -172,6 +174,7 @@ See `extension/providers.js` for both full lists with display names. Any code ou
   - popup.html
   - popup.js
   - providers.js
+  - history.js
   - options.html
   - options.js
   - options.css
@@ -195,7 +198,7 @@ currency_converter/
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
-│   ├── history.js      # Recent-conversions helpers: size setting, row formatting, trimming
+│   ├── history.js      # Recent-conversions helpers: size setting, table cell formatting, trimming
 │   ├── providers.js    # Provider definitions: currency lists, URL/response handling
 │   ├── options.html    # Settings page UI
 │   ├── options.js      # Settings page logic (saves/loads extensionSettings)
@@ -246,7 +249,6 @@ To customize the extension:
 
 4. **Add new features** (in `popup.js`):
    - Cache historical rates for offline use
-   - Add currency conversion history
    - Export results as CSV
 
 ## Privacy & Data
@@ -279,7 +281,8 @@ To customize the extension:
 Possible additions to the extension:
 
 - [ ] Offline mode with cached historical rates
-- [ ] Conversion history with timestamps
+- [ ] Clear or export the recent conversions
+- [ ] Show when each recent conversion was made
 - [ ] Batch conversion (convert multiple currencies at once)
 - [ ] Chart showing historical conversion rates over time
 - [ ] Support for cryptocurrency conversion
@@ -304,6 +307,9 @@ For issues with a specific provider's API:
 
 ## Changelog
 
+### Unreleased
+- 🕘 Recent conversions table (last 10 by default, configurable from 1 to 100 in Settings)
+
 ### Version 1.0.0 (Initial Release)
 - ✨ Full historical currency conversion
 - 📅 Date picker with validation
@@ -317,4 +323,4 @@ For issues with a specific provider's API:
 
 **Made with ❤️ for currency traders, travelers, and finance enthusiasts**
 
-Last Updated: 2026-09-12
+Last Updated: 2026-11-14
