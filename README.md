@@ -127,27 +127,19 @@ See `extension/providers.js` for both full lists with display names. Any code ou
 ## Troubleshooting
 
 ### "No data available for this date"
-- The requested currency pair may not have historical data for that specific date
-- Try a different date (usually weekends/holidays have no data)
-- Try a different currency pair
+- Each provider only covers its own date range: Frankfurter from 1999-01-01, fawazahmed0 from 2024-03-02. For older dates, switch to Frankfurter
+- Weekends and holidays aren't the problem: both providers return the previous business day's rate for those dates
+- Try a different date or currency pair
 
-### "Invalid currency code"
-- Ensure both currencies are selected from the dropdown
-- Check that currency codes are valid ISO 4217 codes
+### "Invalid currency code or date format"
+- The provider rejected the request. Currencies only come from the dropdowns, so this isn't something you typed wrong
+- Try again, or switch provider
 
-### Extension won't load
-- Verify all required files are present in the folder you selected:
-  - manifest.json
-  - popup.html
-  - popup.js
-  - providers.js
-  - options.html
-  - options.js
-  - options.css
-  - styles.css
-- Make sure you selected the `extension/` subfolder, not the repo root (see Installation above)
-- Check browser console for error messages (F12 → Console tab)
-- Ensure you're using Chrome, Edge, Brave, or another Chromium-based browser
+### The converter doesn't work
+- Check your internet connection: every conversion fetches the rate live from the provider
+- Switch provider: if the other one works, the first one is temporarily unavailable
+- Update your browser and the extension, or remove the extension and reinstall it
+- Use Chrome or another Chromium-based browser (Brave, Edge, Opera, Vivaldi). Firefox and Safari aren't supported
 
 ### Results seem incorrect
 - Verify the date is correct (historical rates change)
@@ -216,6 +208,11 @@ To customize the extension:
    - Cache historical rates for offline use
    - Add currency conversion history
    - Export results as CSV
+
+### Unpacked extension won't load
+- Make sure you selected the `extension/` subfolder, not the repo root (see [From source](#from-source-for-development))
+- Check that the folder has all the extension's files: `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
+- Read the error on the extension's card in `chrome://extensions/`, or open the popup's console via **Inspect views: popup.html**
 
 ## Privacy & Data
 
