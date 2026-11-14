@@ -228,7 +228,7 @@ To customize the extension:
 
 ### Unpacked extension won't load
 - Make sure you selected the `extension/` subfolder, not the repo root (see [From source](#from-source-for-development))
-- Check that the folder has all the extension's files: `history.js`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
+- Check that the folder has all the extension's files: `history.js`, `icons/`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
 - Read the error on the extension's card in `chrome://extensions/`, or open the popup's console via **Inspect views: popup.html**
 
 ## Privacy & Data
