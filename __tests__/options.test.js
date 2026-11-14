@@ -6,6 +6,7 @@
  */
 
 require('../extension/providers.js');
+require('../extension/history.js');
 
 const {
   initializeOptionsElements,
@@ -88,6 +89,7 @@ describe('saveSettings()', () => {
       {
         extensionSettings: {
           apiProvider: 'fawazahmed0',
+          historySize: 10,
           sourceCurrency: 'GBP',
           targetCurrency: 'JPY'
         }
@@ -140,6 +142,42 @@ describe('saveSettings()', () => {
       chrome.runtime.lastError
     );
     consoleSpy.mockRestore();
+  });
+});
+
+describe('history size setting', () => {
+  it('restores the saved history size, defaulting to 10', () => {
+    applySettings({ historySize: 25 });
+    expect(document.getElementById('historySize').value).toBe('25');
+
+    applySettings({});
+    expect(document.getElementById('historySize').value).toBe('10');
+  });
+
+  it('clamps an out-of-range value to 1–100 before saving, and shows what was saved', () => {
+    const input = document.getElementById('historySize');
+    input.value = '500';
+
+    saveSettings({ clearSession: false });
+
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      { extensionSettings: expect.objectContaining({ historySize: 100 }) },
+      expect.any(Function)
+    );
+    expect(input.value).toBe('100');
+  });
+
+  it("saves on change without erasing the popup's last-used session", () => {
+    setupOptionsEventListeners();
+    const input = document.getElementById('historySize');
+    input.value = '20';
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      { extensionSettings: expect.objectContaining({ historySize: 20 }) },
+      expect.any(Function)
+    );
+    expect(chrome.storage.local.remove).not.toHaveBeenCalled();
   });
 });
 

@@ -79,6 +79,11 @@
     <div id="error" class="error hidden"></div>
     <div id="loading" class="loading hidden">Converting...</div>
 
+    <div id="history" class="history hidden">
+      <h2>Recent conversions</h2>
+      <ol id="historyList" class="history-list"></ol>
+    </div>
+
     <div class="info">
       <p>🔄 Historical exchange rates from your selected provider above</p>
       <p>📅 Date range and currency list both depend on the provider — see its label</p>
@@ -95,6 +100,7 @@
     window.Temporal = window.Temporal || window.temporal.Temporal;
   </script>
   <script src="providers.js"></script>
+  <script src="history.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

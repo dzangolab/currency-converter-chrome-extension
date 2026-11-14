@@ -32,6 +32,11 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label for="historySize">Recent Conversions to Keep</label>
+      <input type="number" id="historySize" min="1" max="100" step="1" value="10" required>
+    </div>
+
     <div id="savedMessage" class="saved-message hidden">✓ Saved</div>
 
     <div class="info">
@@ -41,6 +46,7 @@
   </div>
 
   <script src="providers.js"></script>
+  <script src="history.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

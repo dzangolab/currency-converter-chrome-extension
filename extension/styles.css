@@ -288,6 +288,46 @@ select {
   50% { opacity: 0.5; }
 }
 
+/* Recent conversions: one row per conversion, newest first. Rows have a
+   fixed height so the pane can cap itself at exactly 10 of them; a larger
+   configured history scrolls inside the pane instead of growing the popup. */
+.history {
+  --history-row-height: 26px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.history.hidden {
+  display: none;
+}
+
+.history h2 {
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.history-list {
+  list-style: none;
+  max-height: calc(10 * var(--history-row-height));
+  overflow-y: auto;
+}
+
+.history-list li {
+  border-bottom: 1px solid #f3f3f3;
+  color: #444;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  height: var(--history-row-height);
+  line-height: var(--history-row-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .info {
   border-top: 1px solid #eee;
   color: #999;

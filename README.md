@@ -12,6 +12,7 @@ A Chrome/Chromium extension for converting currencies at historical exchange rat
 - Real-time conversion as you type
 - Simple, clean interface
 - Copy results to clipboard
+- Recent conversions list (last 10 by default, configurable up to 100)
 - No API key required for either provider
 
 ## Installation
@@ -70,13 +71,19 @@ Switching providers rebuilds both currency dropdowns for the new provider's curr
 
 ### Settings
 
-Click the ⚙ icon in the popup (or right-click the extension icon → Options, or "Extension options" from `chrome://extensions/`) to open the Settings page and configure your default provider and default "from"/"to" currencies.
+Click the ⚙ icon in the popup (or right-click the extension icon → Options, or "Extension options" from `chrome://extensions/`) to open the Settings page and configure your default provider and default "from"/"to" currencies, and how many recent conversions to keep.
 
-These are the defaults shown when there's nothing else to go on. Once you convert something, the popup remembers that specific provider/currencies/amount/date and restores it on every subsequent open, taking priority over these Settings. **Changing any Settings field clears that remembered session** — so a change here always takes visible effect the next time you open the popup, rather than being silently overridden by whatever you converted last.
+These are the defaults shown when there's nothing else to go on. Once you convert something, the popup remembers that specific provider/currencies/amount/date and restores it on every subsequent open, taking priority over these Settings. **Changing the default provider or currencies clears that remembered session** — so a change here always takes visible effect the next time you open the popup, rather than being silently overridden by whatever you converted last.
 
 ### Reset
 
 Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the form to your configured Settings — provider, "from"/"to" currencies, amount back to 1, date back to today — without leaving the popup. This also clears the remembered session the same way changing a Settings field does, and re-runs the conversion against the reset values so you see a live result right away, not a blank form.
+
+### Recent Conversions
+
+Every successful conversion is added to the top of the **Recent conversions** list, above the notes at the bottom of the popup. Each row reads `USD 1,000.00 @ 0.921234 = EUR 921.23 05/Mar/2024`: source amount, the rate, the converted amount, and the date of the rate. Running the same conversion twice in a row doesn't add a duplicate row.
+
+The list keeps the last 10 conversions by default. Change that in Settings (**Recent Conversions to Keep**, 1–100). The pane shows up to 10 rows and scrolls beyond that. Changing this setting doesn't clear the remembered session, and neither Reset nor changing other Settings clears the list.
 
 ### Real-Time Conversion
 
@@ -182,6 +189,7 @@ currency_converter/
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
+│   ├── history.js      # Recent-conversions helpers: size setting, row formatting, trimming
 │   ├── providers.js    # Provider definitions: currency lists, URL/response handling
 │   ├── options.html    # Settings page UI
 │   ├── options.js      # Settings page logic (saves/loads extensionSettings)
@@ -237,10 +245,9 @@ To customize the extension:
 
 ## Privacy & Data
 
-- **No data collection**: The extension doesn't store or track your conversions
 - **API calls only**: Data is only sent to your selected provider (Frankfurter.app or fawazahmed0/currency-api's CDN)
 - **No authentication**: No credentials stored locally for either provider
-- **Local storage**: Your form inputs (last-used provider, currencies, amount, date) and your Settings-page defaults are both saved via `chrome.storage.local`, never synced or sent anywhere else
+- **Local storage**: Your form inputs (last-used provider, currencies, amount, date), your recent conversions and your Settings-page defaults are saved via `chrome.storage.local`, never synced or sent anywhere else
 
 ## Performance
 

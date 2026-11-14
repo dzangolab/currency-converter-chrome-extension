@@ -6,12 +6,13 @@
 // settings save also erases converterData: the next popup open then has
 // nothing to restore and falls back to exactly what was just configured.
 
-let apiProviderSelect, sourceCurrencySelect, targetCurrencySelect, savedMessage;
+let apiProviderSelect, sourceCurrencySelect, targetCurrencySelect, historySizeInput, savedMessage;
 
 function initializeOptionsElements() {
   apiProviderSelect = document.getElementById('apiProvider');
   sourceCurrencySelect = document.getElementById('sourceCurrency');
   targetCurrencySelect = document.getElementById('targetCurrency');
+  historySizeInput = document.getElementById('historySize');
   savedMessage = document.getElementById('savedMessage');
 }
 
@@ -29,11 +30,31 @@ function applySettings(settings) {
   if (!targetCurrencySelect.value) {
     targetCurrencySelect.value = 'EUR';
   }
+
+  if (historySizeInput) {
+    historySizeInput.value = normalizeHistorySize(settings.historySize);
+  }
 }
 
-function saveSettings() {
+function showSavedMessage() {
+  if (savedMessage) {
+    savedMessage.classList.remove('hidden');
+    setTimeout(() => savedMessage.classList.add('hidden'), 1500);
+  }
+}
+
+// clearSession: false is for the history size, which isn't one of the
+// popup's defaults — changing it has no reason to wipe the last-used session.
+function saveSettings({ clearSession = true } = {}) {
+  const historySize = historySizeInput ? normalizeHistorySize(historySizeInput.value) : DEFAULT_HISTORY_SIZE;
+  if (historySizeInput) {
+    // Show the value actually saved, e.g. 500 -> 100 or "" -> 10.
+    historySizeInput.value = historySize;
+  }
+
   const settings = {
     apiProvider: apiProviderSelect.value,
+    historySize,
     sourceCurrency: sourceCurrencySelect.value,
     targetCurrency: targetCurrencySelect.value
   };
@@ -41,6 +62,11 @@ function saveSettings() {
   chrome.storage.local.set({ extensionSettings: settings }, () => {
     if (chrome.runtime.lastError) {
       console.error('Settings save error:', chrome.runtime.lastError);
+      return;
+    }
+
+    if (!clearSession) {
+      showSavedMessage();
       return;
     }
 
@@ -52,10 +78,7 @@ function saveSettings() {
         console.error('Failed to clear the previous session:', chrome.runtime.lastError);
         return;
       }
-      if (savedMessage) {
-        savedMessage.classList.remove('hidden');
-        setTimeout(() => savedMessage.classList.add('hidden'), 1500);
-      }
+      showSavedMessage();
     });
   });
 }
@@ -78,8 +101,13 @@ function setupOptionsEventListeners() {
     saveSettings();
   });
 
-  sourceCurrencySelect.addEventListener('change', saveSettings);
-  targetCurrencySelect.addEventListener('change', saveSettings);
+  // Wrapped rather than passed directly, so the Event isn't taken as
+  // saveSettings()'s options argument.
+  if (historySizeInput) {
+    historySizeInput.addEventListener('change', () => saveSettings({ clearSession: false }));
+  }
+  sourceCurrencySelect.addEventListener('change', () => saveSettings());
+  targetCurrencySelect.addEventListener('change', () => saveSettings());
 }
 
 document.addEventListener('DOMContentLoaded', () => {
