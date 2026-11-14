@@ -83,9 +83,9 @@ Click the ↺ icon in the popup (next to ⚙ Settings) to immediately revert the
 
 Every successful conversion is added to the top of the **Recent conversions** table, above the notes at the bottom of the popup. Each row has four columns:
 
-| From | Rate | To | Date |
-| ---: | ---: | ---: | ---: |
-| USD 1,000.00 | 0.921234 | EUR 921.23 | 05 Mar 2024 |
+| From | | Rate | To | | Date |
+| :--- | ---: | ---: | :--- | ---: | ---: |
+| USD | 1,000.00 | 0.921234 | EUR | 921.23 | 05 Mar 2024 |
 
 The date is the date of the rate. Running the same conversion twice in a row doesn't add a duplicate row.
 

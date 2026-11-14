@@ -48,7 +48,7 @@ describe('normalizeHistorySize()', () => {
 
 describe('formatHistoryCells()', () => {
   it('formats the From, Rate, To and Date cells of a row', () => {
-    expect(formatHistoryCells(entry())).toEqual(['USD 1,000.00', '0.921234', 'EUR 921.23', '05 Mar 2024']);
+    expect(formatHistoryCells(entry())).toEqual(['USD', '1,000.00', '0.921234', 'EUR', '921.23', '05 Mar 2024']);
   });
 
   it('pads the day and uses English month abbreviations', () => {
@@ -101,8 +101,8 @@ describe('popup history pane', () => {
 
     expect(document.getElementById('history').classList.contains('hidden')).toBe(false);
     expect(rows()).toEqual([
-      ['USD 3.00', '0.921234', 'EUR 2.76', '05 Mar 2024'],
-      ['USD 2.00', '0.921234', 'EUR 1.84', '05 Mar 2024']
+      ['USD', '3.00', '0.921234', 'EUR', '2.76', '05 Mar 2024'],
+      ['USD', '2.00', '0.921234', 'EUR', '1.84', '05 Mar 2024']
     ]);
   });
 
@@ -119,7 +119,7 @@ describe('popup history pane', () => {
 
     loadFormData();
 
-    expect(rows()).toEqual([['USD 1,000.00', '0.921234', 'EUR 921.23', '05 Mar 2024']]);
+    expect(rows()).toEqual([['USD', '1,000.00', '0.921234', 'EUR', '921.23', '05 Mar 2024']]);
   });
 
   it('records a successful conversion, trimmed to the configured history size', () => {
@@ -147,7 +147,7 @@ describe('popup history pane', () => {
 
     await performConversion();
 
-    expect(rows()).toEqual([['USD 10.00', '0.500000', 'EUR 5.00', '01 Jan 2024']]);
+    expect(rows()).toEqual([['USD', '10.00', '0.500000', 'EUR', '5.00', '01 Jan 2024']]);
   });
 
   it("doesn't record a failed conversion", async () => {

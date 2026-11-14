@@ -40,13 +40,17 @@ function formatHistoryDate(dateStr) {
   return `${day} ${MONTH_ABBREVIATIONS[date.month - 1]} ${date.year}`;
 }
 
-// One history table row's cells, in column order (From, Rate, To, Date),
-// e.g. ["USD 1,000.00", "0.921234", "EUR 921.23", "05 Mar 2024"].
+// One history table row's cells, in column order. From and To each take two
+// cells (currency, amount) so the currency can be left-aligned and the
+// amount right-aligned, e.g.
+// ["USD", "1,000.00", "0.921234", "EUR", "921.23", "05 Mar 2024"].
 function formatHistoryCells(entry) {
   return [
-    `${entry.sourceCurrency} ${formatHistoryAmount(entry.sourceAmount)}`,
+    entry.sourceCurrency,
+    formatHistoryAmount(entry.sourceAmount),
     entry.rate.toFixed(6),
-    `${entry.targetCurrency} ${formatHistoryAmount(entry.sourceAmount * entry.rate)}`,
+    entry.targetCurrency,
+    formatHistoryAmount(entry.sourceAmount * entry.rate),
     formatHistoryDate(entry.date)
   ];
 }

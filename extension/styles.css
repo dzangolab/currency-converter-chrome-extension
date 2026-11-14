@@ -333,6 +333,7 @@ select {
 
 .history-table th {
   background: white;
+  text-align: center;
   border-bottom: 1px solid #ddd;
   color: #999;
   font-size: 11px;
@@ -345,6 +346,14 @@ select {
 .history-table td {
   border-bottom: 1px solid #f3f3f3;
   color: #444;
+}
+
+/* Currency codes (the first cell of From and of To) sit left; amounts, rate
+   and date stay right-aligned. */
+.history-table td:nth-child(1),
+.history-table td:nth-child(4) {
+  padding-right: 0;
+  text-align: left;
 }
 
 .history-table th:first-child,
