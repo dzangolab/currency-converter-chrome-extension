@@ -199,6 +199,17 @@ currency_converter/
 - **Fetch API**: For HTTP requests to either provider
 - **CSS Grid/Flexbox**: For responsive layout
 
+### Building a Release
+
+Requires [just](https://github.com/casey/just).
+
+1. Bump `"version"` in `extension/manifest.json`. The store refuses an upload whose version isn't higher than the published one
+2. Run `just build`. It runs the tests, then writes `dist/historical-currency-converter-<version>.zip`
+3. Upload that zip in the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
+4. Tag the release and attach the zip, so every published version stays downloadable: `gh release create v<version> dist/historical-currency-converter-<version>.zip`
+
+`dist/` is git-ignored: zips are build outputs and are never committed.
+
 ### Commit Conventions & Git Hooks
 
 Commits must follow [Conventional Commits](https://www.conventionalcommits.org/) (`type: subject`, e.g. `fix: correct date range validation`, `feat: add reset button`) — enforced by [commitlint](https://commitlint.js.org/) (`commitlint.config.js`) via a [husky](https://typicode.github.io/husky/) `commit-msg` hook. A `pre-commit` hook also runs [sort-package-json](https://github.com/keithamus/sort-package-json) (re-staging `package.json` if it changed) and the full test suite — a commit is rejected if either hook fails. Hooks install automatically via `npm install`'s `prepare` script; check a message without committing with `echo "your message" | npx commitlint`.
