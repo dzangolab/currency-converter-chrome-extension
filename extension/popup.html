@@ -82,6 +82,24 @@
     <div id="error" class="error hidden"></div>
     <div id="loading" class="loading hidden">Converting...</div>
 
+    <div id="history" class="history hidden">
+      <h2>Recent conversions</h2>
+      <div class="history-scroll">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th scope="colgroup" colspan="2">From</th>
+              <th scope="col">Rate</th>
+              <th scope="colgroup" colspan="2">To</th>
+              <th scope="col">Date</th>
+              <th scope="col"><span class="visually-hidden">Delete</span></th>
+            </tr>
+          </thead>
+          <tbody id="historyRows"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="info">
       <p>🔄 Historical exchange rates from your selected provider above</p>
       <p>📅 Date range and currency list both depend on the provider — see its label</p>
@@ -98,6 +116,7 @@
     window.Temporal = window.Temporal || window.temporal.Temporal;
   </script>
   <script src="providers.js"></script>
+  <script src="history.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
