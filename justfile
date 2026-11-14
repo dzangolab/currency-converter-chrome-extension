@@ -16,6 +16,10 @@ build: test
     echo "Built $zip_file"
     unzip -l "$zip_file"
 
+# Install the exact dev dependencies from package-lock.json, plus the git hooks
+install:
+    npm ci
+
 # Run the Jest suite (only this repo's tests, not those of any agent worktree)
 test:
     npx jest --testPathIgnorePatterns=/node_modules/ /.claude/

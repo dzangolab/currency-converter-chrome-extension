@@ -201,7 +201,7 @@ currency_converter/
 
 ### Building a Release
 
-Requires [just](https://github.com/casey/just).
+Requires [just](https://github.com/casey/just). On a fresh clone, run `just install` first.
 
 1. Bump `"version"` in `extension/manifest.json`. The store refuses an upload whose version isn't higher than the published one
 2. Run `just build`. It runs the tests, then writes `dist/historical-currency-converter-<version>.zip`
@@ -212,7 +212,7 @@ Requires [just](https://github.com/casey/just).
 
 ### Commit Conventions & Git Hooks
 
-Commits must follow [Conventional Commits](https://www.conventionalcommits.org/) (`type: subject`, e.g. `fix: correct date range validation`, `feat: add reset button`) — enforced by [commitlint](https://commitlint.js.org/) (`commitlint.config.js`) via a [husky](https://typicode.github.io/husky/) `commit-msg` hook. A `pre-commit` hook also runs [sort-package-json](https://github.com/keithamus/sort-package-json) (re-staging `package.json` if it changed) and the full test suite — a commit is rejected if either hook fails. Hooks install automatically via `npm install`'s `prepare` script; check a message without committing with `echo "your message" | npx commitlint`.
+Commits must follow [Conventional Commits](https://www.conventionalcommits.org/) (`type: subject`, e.g. `fix: correct date range validation`, `feat: add reset button`) — enforced by [commitlint](https://commitlint.js.org/) (`commitlint.config.js`) via a [husky](https://typicode.github.io/husky/) `commit-msg` hook. A `pre-commit` hook also runs [sort-package-json](https://github.com/keithamus/sort-package-json) (re-staging `package.json` if it changed) and the full test suite — a commit is rejected if either hook fails. Hooks install automatically with `just install` (which runs `npm ci`, whose `prepare` script sets them up); check a message without committing with `echo "your message" | npx commitlint`.
 
 ### Adding a New Provider
 

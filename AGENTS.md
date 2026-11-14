@@ -33,6 +33,7 @@ currency_converter/
 
 ```bash
 just build               # run the tests, then zip extension/ into dist/historical-currency-converter-<version>.zip
+just install             # npm ci: exact deps from package-lock.json; its "prepare" script installs husky's git hooks
 just test                # run only this repo's tests (skips agent worktrees under .claude/)
 npm install              # install dev deps (also runs "prepare" -> installs husky's git hooks)
 npm test                 # run the full test suite once
