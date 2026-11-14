@@ -32,6 +32,9 @@ currency_converter/
 ## Commands
 
 ```bash
+just build               # run the tests, then zip extension/ into dist/historical-currency-converter-<version>.zip
+just install             # npm ci: exact deps from package-lock.json; its "prepare" script installs husky's git hooks
+just test                # run only this repo's tests (skips agent worktrees under .claude/)
 npm install              # install dev deps (also runs "prepare" -> installs husky's git hooks)
 npm test                 # run the full test suite once
 npm run test:watch       # re-run on file changes
@@ -45,7 +48,7 @@ npx sort-package-json    # re-sort package.json by hand (pre-commit does this au
 echo "feat: whatever" | npx commitlint   # check a commit message against the conventional-commit rules without committing
 ```
 
-There is no lint or build command. To run the extension itself (not tested by Jest): open `chrome://extensions/`, enable Developer mode, "Load unpacked", select the **`extension/`** subfolder (not the repo root — see above); after edits, click the reload icon on the extension card and reopen the popup. For popup-scoped debugging, use "Inspect views: popup.html" from `chrome://extensions/`.
+There is no lint command and no compile step; `just build` (see `justfile`) only zips the contents of `extension/` — so `manifest.json` is at the archive's top level, as the Chrome Web Store requires — into the git-ignored `dist/`, named from `manifest.json`'s `version`. Zips are never committed: each published version's zip is attached to a GitHub Release instead (`gh release create v<version> dist/<zip>`). To run the extension itself (not tested by Jest): open `chrome://extensions/`, enable Developer mode, "Load unpacked", select the **`extension/`** subfolder (not the repo root — see above); after edits, click the reload icon on the extension card and reopen the popup. For popup-scoped debugging, use "Inspect views: popup.html" from `chrome://extensions/`.
 
 **Git hooks (husky v9 + commitlint + sort-package-json)**: `core.hooksPath` is `.husky/_` (set by `npm install`'s `prepare` script running `husky`, which also regenerates that directory — it's self-`.gitignore`d, don't hand-edit it). The two hooks that matter are the plain-text, no-shebang files at `.husky/pre-commit` and `.husky/commit-msg` (husky v9 dropped the old `#!/usr/bin/env sh` + `. "$(dirname -- "$0")/_/husky.sh"` boilerplate — adding it back is deprecated and errors starting in v10): `pre-commit` runs `sort-package-json`, re-`git add`s `package.json` in case it just got rewritten, then `npm test`; `commit-msg` runs `commitlint --edit "$1"` against `commitlint.config.js` (`@commitlint/config-conventional` — standard `type: subject` conventional-commit format, e.g. `fix: correct date range validation`). A commit that fails either check is rejected before it's created.
 
