@@ -107,14 +107,7 @@
   </div>
 
   <script src="vendor/temporal-polyfill.js"></script>
-  <script>
-    // This polyfill's UMD build exposes globalThis.temporal (lowercase
-    // namespace), not the spec's actual `Temporal` global — promote it so
-    // providers.js/popup.js can use `Temporal.*` directly. A no-op once
-    // browsers ship Temporal natively (globalThis.Temporal would already
-    // exist and this vendor file wouldn't be needed at all).
-    window.Temporal = window.Temporal || window.temporal.Temporal;
-  </script>
+  <script src="vendor/temporal-shim.js"></script>
   <script src="providers.js"></script>
   <script src="history.js"></script>
   <script src="popup.js"></script>

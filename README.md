@@ -180,7 +180,8 @@ currency_converter/
 │   ├── options.css     # Settings page layout override (full-tab, not popup-width)
 │   ├── styles.css      # Shared styling (popup + settings)
 │   └── vendor/
-│       └── temporal-polyfill.js   # @js-temporal/polyfill, vendored (see Key Technologies)
+│       ├── temporal-polyfill.js   # @js-temporal/polyfill, vendored (see Key Technologies)
+│       └── temporal-shim.js       # Exposes the polyfill as the global `Temporal`
 ├── __tests__/          # Jest test suite (not part of the extension)
 ├── package.json        # Test tooling, plus the one vendored runtime dependency
 └── README.md           # This file
@@ -194,7 +195,7 @@ currency_converter/
 ### Key Technologies
 - **Manifest V3**: Latest Chrome extension standard
 - **Vanilla JavaScript**: No frameworks
-- **[Temporal](https://tc39.es/proposal-temporal/)**: all date handling (`Temporal.PlainDate`, `Temporal.Now.plainDateISO()`) instead of `Date` — sidesteps `Date`'s UTC-vs-local timezone ambiguity entirely for calendar-only values like a `YYYY-MM-DD` date input. Not yet native in Chrome, so `extension/vendor/temporal-polyfill.js` (from `@js-temporal/polyfill`) is loaded on the popup; drop it once Chrome ships `Temporal` natively.
+- **[Temporal](https://tc39.es/proposal-temporal/)**: all date handling (`Temporal.PlainDate`, `Temporal.Now.plainDateISO()`) instead of `Date` — sidesteps `Date`'s UTC-vs-local timezone ambiguity entirely for calendar-only values like a `YYYY-MM-DD` date input. Not yet native in Chrome, so `extension/vendor/temporal-polyfill.js` (from `@js-temporal/polyfill`) is loaded on the popup, followed by `extension/vendor/temporal-shim.js`, which exposes it as the global `Temporal` (a separate file, not an inline `<script>`, since the extension CSP blocks inline scripts); drop both once Chrome ships `Temporal` natively.
 - **Fetch API**: For HTTP requests to either provider
 - **CSS Grid/Flexbox**: For responsive layout
 
@@ -228,7 +229,7 @@ To customize the extension:
 
 ### Unpacked extension won't load
 - Make sure you selected the `extension/` subfolder, not the repo root (see [From source](#from-source-for-development))
-- Check that the folder has all the extension's files: `history.js`, `icons/`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
+- Check that the folder has all the extension's files: `history.js`, `icons/`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css`, `vendor/temporal-polyfill.js` and `vendor/temporal-shim.js`
 - Read the error on the extension's card in `chrome://extensions/`, or open the popup's console via **Inspect views: popup.html**
 
 ## Privacy & Data
