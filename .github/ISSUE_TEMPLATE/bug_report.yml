@@ -1,0 +1,88 @@
+name: Bug report
+description: Something in the extension doesn't work as expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please check the README's [Troubleshooting](../blob/main/README.md#troubleshooting) section first: "No data available for this date" usually means the date is outside the chosen provider's range.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What went wrong, including any error message shown in the popup, word for word.
+      placeholder: 'Converting 100 USD to EUR on 2010-05-03 shows "API error: Unable to fetch exchange rates".'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: The converted amount and the rate for that date.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact steps, starting from opening the popup or the Settings page.
+      placeholder: |
+        1. Open the popup
+        2. Choose Frankfurter, USD → EUR, amount 100, date 2010-05-03
+        3. Click Convert
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Exchange rate provider
+      options:
+        - Frankfurter.app
+        - fawazahmed0/currency-api
+        - Both
+        - Not related to a provider
+    validations:
+      required: true
+
+  - type: input
+    id: conversion
+    attributes:
+      label: Currencies, amount and date
+      description: If the problem is with a conversion.
+      placeholder: USD → EUR, 100, 2010-05-03
+
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      description: Shown on the extension's card in chrome://extensions/
+      placeholder: 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: Shown in chrome://version/ (or your browser's equivalent)
+      placeholder: Chrome 157.0.8103.79 on macOS 26
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: "Optional. Right-click inside the open popup → Inspect → Console tab, and paste any red errors."
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional. Drag and drop images here.
