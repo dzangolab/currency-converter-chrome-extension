@@ -51,6 +51,11 @@ describe('formatHistoryCells()', () => {
     expect(formatHistoryCells(entry())).toEqual(['USD', '1,000.00', '0.921234', 'EUR', '921.23', '05 Mar 2024']);
   });
 
+  it('shows the rate with 6 significant digits, so large rates stay narrow', () => {
+    expect(formatHistoryCells(entry({ rate: 129.52 }))[2]).toBe('129.520');
+    expect(formatHistoryCells(entry({ rate: 0.0012345678 }))[2]).toBe('0.00123457');
+  });
+
   it('pads the day and uses English month abbreviations', () => {
     expect(formatHistoryDate('2023-12-01')).toBe('01 Dec 2023');
     expect(formatHistoryDate('2024-01-31')).toBe('31 Jan 2024');

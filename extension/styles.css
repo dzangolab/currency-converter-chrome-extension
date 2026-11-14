@@ -329,7 +329,7 @@ select {
 
 .history-table {
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
   width: 100%;
 }
@@ -337,7 +337,7 @@ select {
 .history-table th,
 .history-table td {
   height: var(--history-row-height);
-  padding: 0 6px;
+  padding: 0 4px;
   text-align: right;
   white-space: nowrap;
 }
@@ -347,7 +347,7 @@ select {
   text-align: center;
   border-bottom: 1px solid #ddd;
   color: #999;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   position: sticky;
   text-transform: uppercase;
@@ -371,9 +371,9 @@ select {
   color: #bbb;
   cursor: pointer;
   font-size: 12px;
-  height: 20px;
-  line-height: 20px;
-  width: 20px;
+  height: 18px;
+  line-height: 18px;
+  width: 18px;
 }
 
 .btn-delete:hover,

@@ -48,7 +48,9 @@ function formatHistoryCells(entry) {
   return [
     entry.sourceCurrency,
     formatHistoryAmount(entry.sourceAmount),
-    entry.rate.toFixed(6),
+    // 6 significant digits, not 6 decimals: a rate like 129.52 would
+    // otherwise render as "129.520000", too wide for the popup's table.
+    entry.rate.toPrecision(6),
     entry.targetCurrency,
     formatHistoryAmount(entry.sourceAmount * entry.rate),
     formatHistoryDate(entry.date)
