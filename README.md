@@ -169,6 +169,7 @@ See `extension/providers.js` for both full lists with display names. Any code ou
 ```
 currency_converter/
 ├── extension/          # <- Load THIS folder as the unpacked extension
+│   ├── icons/          # Logo: SVG sources and the 16/32/48/128px PNGs
 │   ├── manifest.json   # Extension configuration (Manifest V3)
 │   ├── popup.html      # User interface
 │   ├── popup.js        # Conversion logic; provider-agnostic
@@ -227,7 +228,7 @@ To customize the extension:
 
 ### Unpacked extension won't load
 - Make sure you selected the `extension/` subfolder, not the repo root (see [From source](#from-source-for-development))
-- Check that the folder has all the extension's files: `history.js`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
+- Check that the folder has all the extension's files: `history.js`, `icons/`, `manifest.json`, `options.css`, `options.html`, `options.js`, `popup.html`, `popup.js`, `providers.js`, `styles.css` and `vendor/temporal-polyfill.js`
 - Read the error on the extension's card in `chrome://extensions/`, or open the popup's console via **Inspect views: popup.html**
 
 ## Privacy & Data
