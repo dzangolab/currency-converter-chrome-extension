@@ -1,0 +1,52 @@
+name: Feature request
+description: Suggest a new feature or an improvement to the extension
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Please check the existing [issues](../issues?q=label%3Aenhancement) first, in case it has already been requested.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: What are you trying to do, and what gets in the way today?
+      placeholder: I convert the same amount on several dates to compare them, and have to re-enter each date one by one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+      description: Describe the feature as you imagine it. Mock-ups or examples from other tools are welcome.
+      placeholder: A way to pick a date range and see the converted amount for each day in the recent conversions table.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the extension?
+      options:
+        - Converter (popup)
+        - Recent conversions
+        - Settings page
+        - Currencies or rate providers
+        - Something new
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Optional. Workarounds you use today, or other ways this could work.
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Mock-ups or screenshots
+      description: Optional. Drag and drop images here.
