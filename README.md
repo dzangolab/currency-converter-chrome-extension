@@ -16,43 +16,25 @@ A Chrome/Chromium extension for converting currencies at historical exchange rat
 
 ## Installation
 
-### Step 1: Locate the Extension Files
+### From the Chrome Web Store
 
-The shippable extension lives in the `extension/` subfolder:
-   - `extension/manifest.json`
-   - `extension/popup.html`
-   - `extension/popup.js`
-   - `extension/providers.js`
-   - `extension/options.html`
-   - `extension/options.js`
-   - `extension/options.css`
-   - `extension/styles.css`
+1. Open the extension's page on the Chrome Web Store
+2. Click **Add to Chrome**, then **Add extension** to confirm
+3. Pin it from the puzzle-piece (Extensions) menu so its icon stays in the toolbar
 
-Everything else in this repo (`__tests__/`, `node_modules/`, `package.json`, etc.) is dev/test tooling and must **not** be inside the folder you point Chrome at — Chrome's unpacked-extension loader recursively rejects any folder containing a file or directory whose name starts with `_` (like `__tests__`) or is otherwise reserved, so pointing it at the repo root fails with "Failed to load extension".
+The same listing works in any Chromium-based browser that accepts Chrome Web Store extensions (Brave, Edge, Opera, Vivaldi). Firefox and Safari aren't supported.
 
-### Step 2: Load into Chrome/Chromium
+Once installed, click the toolbar icon to open the converter, pick a provider, currencies, amount and date, and the result appears right away.
 
-#### For Chrome:
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top right)
-3. Click **Load unpacked**
-4. Select the `extension/` folder (not the repo root)
-5. The extension will appear in your extensions list
+### From source (for development)
 
-#### For Chromium/Brave/Edge:
-1. Open browser and go to `chrome://extensions/` (or `brave://extensions/`, `edge://extensions/`)
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select the `extension/` folder (not the repo root)
+1. Clone this repository
+2. Open `chrome://extensions/` (or `brave://extensions/`, `edge://extensions/`)
+3. Turn on **Developer mode** (top right)
+4. Click **Load unpacked** and select the **`extension/`** folder, not the repo root
+5. After editing a file, click the reload icon on the extension's card and reopen the popup
 
-#### For Firefox (if using Manifest V3 compatibility):
-Note: This extension uses Manifest V3, which is Chrome-specific. Firefox requires additional setup or modification.
-
-### Step 3: Use the Extension
-
-1. Click the extension icon in your browser toolbar
-2. A popup will open with the converter interface
-3. Select your currencies and date, then convert
+Only `extension/` is shipped. Everything else in the repo (`__tests__/`, `node_modules/`, `package.json`, …) is test tooling. Chrome refuses to load any folder that contains a file or directory whose name starts with `_`, so pointing it at the repo root fails with "Failed to load extension". To run the tests, see [Development](#development).
 
 ## How to Use
 
@@ -237,10 +219,10 @@ To customize the extension:
 
 ## Privacy & Data
 
-- **No data collection**: The extension doesn't store or track your conversions
-- **API calls only**: Data is only sent to your selected provider (Frankfurter.app or fawazahmed0/currency-api's CDN)
-- **No authentication**: No credentials stored locally for either provider
-- **Local storage**: Your form inputs (last-used provider, currencies, amount, date) and your Settings-page defaults are both saved via `chrome.storage.local`, never synced or sent anywhere else
+- **API calls only**: The only data sent anywhere is the currency pair and date of each conversion, to your selected provider (Frankfurter.app or fawazahmed0/currency-api's CDN)
+- **Local storage only**: Your last conversion (provider, currencies, amount, date) and your Settings-page defaults are saved on your device via `chrome.storage.local`, never synced or sent anywhere. The last conversion is kept only so the popup can restore it, not as a history, and is erased when you click ↺ Reset or change a Setting
+- **No authentication**: Neither provider needs an account or API key, so no credentials are stored
+- **No tracking**: No analytics, telemetry or third-party scripts
 
 ## Performance
 
