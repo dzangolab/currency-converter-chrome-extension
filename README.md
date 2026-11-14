@@ -188,9 +188,9 @@ currency_converter/
 ```
 
 ### Permissions Used
-- `activeTab`: To detect when user opens the popup
 - `host_permissions`: To fetch data from `https://api.frankfurter.app/*`, `https://cdn.jsdelivr.net/*`, and `https://*.currency-api.pages.dev/*` (fawazahmed0's Cloudflare Pages fallback)
 - `options_page`: Registers `options.html` as the extension's Settings page (opens from `chrome://extensions/`, the right-click context menu, or the ⚙ button in the popup)
+- `storage`: Saves your Settings, your last conversion and your recent conversions in `chrome.storage.local`, on your device only
 
 ### Key Technologies
 - **Manifest V3**: Latest Chrome extension standard
