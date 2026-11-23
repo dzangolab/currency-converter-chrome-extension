@@ -10,7 +10,10 @@
     "historical"
   ],
   "license": "SUL-1.0",
-  "author": "Olvier Pichon",
+  "author": {
+    "name": "Dzango Technologies Limited",
+    "url": "https://www.dzango.com"
+  },
   "scripts": {
     "prepare": "husky",
     "test": "jest",
