@@ -9,8 +9,11 @@
     "exchange-rates",
     "historical"
   ],
-  "license": "MIT",
-  "author": "Olvier Pichon",
+  "license": "SUL-1.0",
+  "author": {
+    "name": "Dzango Technologies Limited",
+    "url": "https://www.dzango.com"
+  },
   "scripts": {
     "prepare": "husky",
     "test": "jest",
