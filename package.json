@@ -9,7 +9,7 @@
     "exchange-rates",
     "historical"
   ],
-  "license": "MIT",
+  "license": "SUL-1.0",
   "author": "Olvier Pichon",
   "scripts": {
     "prepare": "husky",

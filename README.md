@@ -266,7 +266,7 @@ To customize the extension:
 
 ## License & Attribution
 
-- **Extension**: [MIT License](LICENSE)
+- **Extension**: [Sustainable Use License 1.0](LICENSE): free to use, copy and modify for personal, non-commercial or internal business use; redistribution only free of charge and for non-commercial purposes
 - **Data Sources**: [Frankfurter.app](https://www.frankfurter.app/) (ECB reference rates, free to use) and [fawazahmed0/currency-api](https://github.com/fawazahmed0/exchange-api) (community-maintained, free to use)
 
 ## Future Enhancements
